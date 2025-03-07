@@ -18,4 +18,10 @@ public class ExceptionAndErrorController {
     public String handleConflic(ConflictException ex) {
         return ex.getMessage();
     }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public String handleUnauthorized(UnauthorizedException ex) {
+        return ex.getMessage();
+    }
 }

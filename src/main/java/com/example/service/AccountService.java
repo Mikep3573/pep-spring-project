@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.entity.Account;
 import com.example.exception.ClientSideException;
 import com.example.exception.ConflictException;
+import com.example.exception.UnauthorizedException;
 import com.example.repository.AccountRepository;
 
 @Service
@@ -40,8 +41,20 @@ public class AccountService {
 
     }
 
-    public Account loginUser(Account account) {
-        return null;
+    public Account loginUser(Account account) throws UnauthorizedException {
+        // Check if an account exists with that username and password
+        // Note: the accountId is given but I figured a more robust implementation 
+        // wouldn't assume the front end has the account id 
+        // (especially if a user only needs username and password to login)
+        Optional<Account> accountOp = accountRepository.findByUsernameAndPassword(account.getUsername(), 
+                                                                                    account.getPassword());
+        // Throw an error if no account exists
+        if (accountOp.isEmpty()) {
+            throw new UnauthorizedException("username or password incorrect");
+        }
+
+        // Return the retrieved account
+        return accountOp.get();
     }
     
 }

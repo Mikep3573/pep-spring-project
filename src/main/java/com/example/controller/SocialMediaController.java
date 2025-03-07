@@ -47,7 +47,10 @@ public class SocialMediaController {
 
     @PostMapping("login")
     public ResponseEntity<Account> postLogin(@RequestBody Account account) {
-        return null;
+        // Attempt to login the account
+        Account persistedAcc = accountService.loginUser(account);
+        return ResponseEntity.ok()
+                        .body(persistedAcc);
     }
 
     @PostMapping("messages")

@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Account;
 import com.example.entity.Message;
-import com.example.exception.ClientSideException;
-import com.example.exception.ConflictException;
 import com.example.service.AccountService;
 import com.example.service.MessageService;
 
@@ -42,7 +40,7 @@ public class SocialMediaController {
         // Attempt to register the account
         Account persistedAcc = accountService.registerUser(account);
         return ResponseEntity.ok()
-                    .body(persistedAcc);
+                            .body(persistedAcc);
     }
 
     @PostMapping("login")
@@ -50,27 +48,40 @@ public class SocialMediaController {
         // Attempt to login the account
         Account persistedAcc = accountService.loginUser(account);
         return ResponseEntity.ok()
-                        .body(persistedAcc);
+                            .body(persistedAcc);
     }
 
     @PostMapping("messages")
-    public ResponseEntity<Account> postMessages(@RequestBody Message message) {
-        return null;
+    public ResponseEntity<Message> postMessage(@RequestBody Message message) {
+        // Attempt to persist the message
+        Message persistedMessage = messageService.createMessage(message);
+        return ResponseEntity.ok()
+                            .body(persistedMessage);
     }
 
     @GetMapping("messages")
     public ResponseEntity<List<Message>> getMessages() {
-        return null;
+        // Retrieve all messages in the message table
+        List<Message> messages = messageService.retrieveMessages();
+        return ResponseEntity.ok() 
+                            .body(messages);
     }
 
     @GetMapping("messages/{messageId}")
     public ResponseEntity<Message> getMessageById(@PathVariable Integer messageId) {
-        return null;
+        // Attempt to retrieve a message in the database by it's id
+        Message message = messageService.retrieveMessage(messageId);
+        System.out.println(message);
+        return ResponseEntity.ok()
+                            .body(message);
     }
 
     @DeleteMapping("messages/{messageId}")
     public ResponseEntity<Integer> deleteMessageById(@PathVariable Integer messageId) {
-        return null;
+        // Attempt to delete a message in the database by it's id
+        Integer rowsAffected = messageService.deleteMessage(messageId);
+        return ResponseEntity.ok()
+                            .body(rowsAffected);
     }
 
     @PatchMapping("messages/{messageId}")

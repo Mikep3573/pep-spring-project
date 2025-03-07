@@ -20,7 +20,7 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public Account registerUser(Account account) throws ClientSideException {
+    public Account registerUser(Account account) throws ClientSideException, ConflictException {
         // Check if the username is blank
         if (account.getUsername().isEmpty()) {
             throw new ClientSideException("username was blank, please provide a username");

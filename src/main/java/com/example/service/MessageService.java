@@ -64,11 +64,33 @@ public class MessageService {
         return rowsAffected > 0 ? rowsAffected : null;
     } 
 
-    public Message updateMessage(Integer messageId) {
-        return null;
+    public Integer updateMessage(Integer messageId, String messageText) throws ClientSideException {
+        // Check that the message text is not blank
+        if (messageText.isEmpty()) {
+            throw new ClientSideException("message must have text");
+        }
+
+        // Check that the message text is not over 255 characters
+        if (messageText.length() > 255) {
+            throw new ClientSideException("message must be at most 255 characters long");
+        }
+
+        // Check that a message with the id exists
+        Optional<Message> messageOp = messageRepository.findById(messageId);
+        if (messageOp.isEmpty()) {
+            throw new ClientSideException("message id must refer to an existing message");
+        }
+
+        // Persist the message
+        Integer rowsAffected = messageRepository.updateTextByIdAndReturnRowsAffected(messageText, messageId);
+
+        // Return the number of rows updated
+        return rowsAffected;
     }
 
     public List<Message> retrieveUserMessages(Integer accountId) {
-        return null;
+        // Get all messages from a particular user
+        List<Message> userMessages = messageRepository.findAllByPostedBy(accountId);
+        return userMessages;
     }
 }

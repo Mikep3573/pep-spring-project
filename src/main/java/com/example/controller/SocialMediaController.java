@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Account;
@@ -17,7 +18,7 @@ import com.example.service.AccountService;
 import com.example.service.MessageService;
 
 /**
- * TODO: You will need to write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
+ * You will need to write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
  * found in readme.md as well as the test cases. You be required to use the @GET/POST/PUT/DELETE/etc Mapping annotations
  * where applicable as well as the @ResponseBody and @PathVariable annotations. You should
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
@@ -85,13 +86,19 @@ public class SocialMediaController {
     }
 
     @PatchMapping("messages/{messageId}")
-    public ResponseEntity<Message> patchMessageById(@PathVariable Integer messageId, @RequestBody String messageText) {
-        return null;
+    public ResponseEntity<Integer> patchMessageById(@PathVariable Integer messageId, @RequestBody Message message) {
+        // Attempt to patch an existing message with the new text
+        Integer rowsAffected = messageService.updateMessage(messageId, message.getMessageText());
+        return ResponseEntity.ok()
+                            .body(rowsAffected);
     }
 
     @GetMapping("accounts/{accountId}/messages") 
     public ResponseEntity<List<Message>> getAccountMessages(@PathVariable Integer accountId) {
-        return null;
+        // Retrieve all messages from a particular user
+        List<Message> userMessages = messageService.retrieveUserMessages(accountId);
+        return ResponseEntity.ok()
+                            .body(userMessages);
     }
 
 

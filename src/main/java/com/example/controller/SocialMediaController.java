@@ -99,9 +99,5 @@ public class SocialMediaController {
         List<Message> userMessages = messageService.retrieveUserMessages(accountId);
         return ResponseEntity.ok()
                             .body(userMessages);
-    }
-
-
-
-    
+    }  
 }
